@@ -16,6 +16,8 @@
 #include "lex.h"
 #include "parseext.h"
 
+#include "Windows.h"
+
 int compilerErrorTotal;
 char compilerSyntaxError;
 
@@ -58,7 +60,9 @@ int expressionNesting = 0;
 static void freeVariableList(VariableList *v);
 static void freeVariable(Variable *v);
 static void parseWhile(Procedure *p, NodeList *n);
-static int writeBlock(NodeList *n, int i, FILE *f);
+int writeBlock(NodeList *n, int i, FILE *f);
+
+static int variable(VariableList *v, char **names, int type, char allowArrays, int allowMulti);
 
 extern FILE* parseroutput;
 
