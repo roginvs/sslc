@@ -6,6 +6,7 @@
         "string.h": "c",
         "unistd.h": "c",
         "lex.h": "c",
-        "parseext.h": "c"
+        "parseext.h": "c",
+        "system.h": "c"
     }
 }
