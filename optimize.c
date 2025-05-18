@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <Windows.h>
+
 #define Protect(a) if (_stricmp(c, a) == 0) return 1;
 
 #define F_OP(token,op)  case token: out->floatData = fd1 op fd2; break;

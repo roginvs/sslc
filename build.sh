@@ -3,8 +3,10 @@ set -e
 
 echo "Starting build process..."
 
-FILES="compile parse parselib extra gencode lex parseext internal 
-mcpp_main mcpp_directive mcpp_eval mcpp_expand mcpp_support mcpp_system"
+FILES="compile parse parselib extra gencode lex parseext  
+mcpp_main mcpp_directive mcpp_eval mcpp_expand mcpp_support mcpp_system 
+optimize
+"
 
 OUT=""
 

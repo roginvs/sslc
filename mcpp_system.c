@@ -40,6 +40,7 @@
 #include    "internal.h"
 
 #include    "direct.h"
+#include <Windows.h>
 #define getcwd( buf, size)  _getcwd( buf, size)
 #include    "sys/types.h"
 #include    "sys/stat.h"                        /* For stat()       */
