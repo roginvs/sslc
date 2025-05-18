@@ -16,7 +16,7 @@ for f in $FILES; do
         exit 1
     fi
     echo "=== Building $f.c ==="
-    clang $f.c -c -o out/$f.o -I./adaptors
+    gcc -g -O0  $f.c -c -o out/$f.o -I./adaptors
 
     OUT="$OUT out/$f.o"
 
@@ -26,7 +26,7 @@ done
 
 echo "=== Linking ==="
 
-clang $OUT -o out/compile
+gcc  -g -O0  $OUT -o out/compile
 
 
 echo "Build process completed successfully."
