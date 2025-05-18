@@ -3,7 +3,7 @@
 #include "parse.h"
 #include "parselib.h"
 #include "extra.h"
-
+#include <string.h>
 #include "parseext.h"
 
 extern int loopNesting;

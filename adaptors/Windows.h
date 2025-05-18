@@ -11,7 +11,7 @@
 
 
 
-int strcpy_s(char* dest, size_t destsz, const char* src) {
+static int strcpy_s(char* dest, size_t destsz, const char* src) {
     if (!dest || !src || destsz == 0) return EINVAL;
     size_t len = strlen(src);
     if (len >= destsz) {
@@ -22,7 +22,7 @@ int strcpy_s(char* dest, size_t destsz, const char* src) {
     return 0;
 }
 
-int strcat_s(char *dest, size_t destsz, const char *src) {
+static int strcat_s(char *dest, size_t destsz, const char *src) {
     if (!dest || !src || destsz == 0) return EINVAL;
 
     size_t dest_len = strlen(dest);
@@ -37,7 +37,7 @@ int strcat_s(char *dest, size_t destsz, const char *src) {
     return 0;
 }
 
-int rand_s(unsigned int *randomValue) {
+static int rand_s(unsigned int *randomValue) {
     if (!randomValue) return EINVAL;
     *randomValue = (unsigned int)rand();
     return 0;

@@ -14,6 +14,8 @@
 
 #include "gencode.h"
 
+#include <Windows.h>
+
 extern int shortCircuit;
 
 static Program *currentProgram;
@@ -34,6 +36,7 @@ int breakStack[2048]; // pointers to arguments to JMP (break statements)
 int breakStackPos = 0;
 int continueStack[2048]; // pointers to arguments to JMP (continue statements)
 int continueStackPos = 0;
+
 
 static int outputSeek(FILE *f, int where, int mode) {
 	return fseek(f, where, mode);
@@ -867,7 +870,7 @@ static int writeStatement(NodeList *n, int i, FILE *f) {
 	return i+1;
 }
 
-static int writeBlock(NodeList *n, int i, FILE *f) {
+int writeBlock(NodeList *n, int i, FILE *f) {
 	if (n->nodes[i].token != T_BEGIN)
 		parseError("begin expected");
 

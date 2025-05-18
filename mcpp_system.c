@@ -33,11 +33,11 @@
  *
  * Routines dependent on O.S., compiler or compiler-driver.
  * To port MCPP for the systems not yet ported, you must
- *      1. specify the constants in "configed.H" or "noconfig.H",
+ *      1. specify the constants in "configed.H" or "noconfig.h",
  *      2. append the system-dependent routines in this file.
  */
-#include    "system.H"
-#include    "internal.H"
+#include    "system.h"
+#include    "internal.h"
 
 #include    "direct.h"
 #define getcwd( buf, size)  _getcwd( buf, size)

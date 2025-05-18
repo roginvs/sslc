@@ -6,9 +6,11 @@
 #include "parse.h"
 #include "parselib.h"
 #include "extra.h"
+#include <Windows.h>
+
 
 LexData lexData;
-static char *tokens[256+T_END_TOKEN];
+char *tokens[256+T_END_TOKEN];
 static struct {
 	LexData c;
 	char *name;
