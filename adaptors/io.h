@@ -3,6 +3,8 @@
 
 #include <sys/types.h>
 
+#define _MSC_VER;
+
 typedef __time_t time_t;
 typedef u_int32_t _fsize_t;
 
@@ -35,19 +37,20 @@ typedef struct {
 } _find_handle_t;
 
 intptr_t _findfirst(const char *pattern, struct _finddata_t *data) {
-    _find_handle_t *handle = malloc(sizeof(_find_handle_t));
+    _find_handle_t *handle = calloc(1, sizeof(_find_handle_t));
     if (!handle) return -1;
 
-    // Split path from pattern (e.g. "dir/*.c")
+    // Split pattern into directory path and wildcard
     const char *slash = strrchr(pattern, '/');
     if (slash) {
-        size_t len = slash - pattern + 1;
+        size_t len = (size_t)(slash - pattern + 1);
+        if (len >= sizeof(handle->path)) len = sizeof(handle->path) - 1;
         strncpy(handle->path, pattern, len);
         handle->path[len] = '\0';
-        strncpy(handle->pattern, slash + 1, sizeof(handle->pattern));
+        strncpy(handle->pattern, slash + 1, sizeof(handle->pattern) - 1);
     } else {
-        strcpy(handle->path, "./");
-        strncpy(handle->pattern, pattern, sizeof(handle->pattern));
+        strncpy(handle->path, "./", sizeof(handle->path) - 1);
+        strncpy(handle->pattern, pattern, sizeof(handle->pattern) - 1);
     }
 
     handle->dir = opendir(handle->path);
@@ -63,7 +66,17 @@ intptr_t _findfirst(const char *pattern, struct _finddata_t *data) {
             char fullpath[512];
             snprintf(fullpath, sizeof(fullpath), "%s%s", handle->path, entry->d_name);
             if (stat(fullpath, &st) == 0) {
-                strncpy(data->name, entry->d_name, sizeof(data->name));
+                // Make the name absolute
+                char abspath[512];
+                if (realpath(fullpath, abspath)) {
+                    strncpy(data->name, abspath, sizeof(data->name) - 1);
+                    data->name[sizeof(data->name) - 1] = '\0';
+                } else {
+                    // Fallback to relative path
+                    strncpy(data->name, fullpath, sizeof(data->name) - 1);
+                    data->name[sizeof(data->name) - 1] = '\0';
+                }
+
                 data->time_write = st.st_mtime;
                 data->size = st.st_size;
                 data->attrib = S_ISDIR(st.st_mode) ? _A_SUBDIR : _A_NORMAL;
@@ -76,6 +89,7 @@ intptr_t _findfirst(const char *pattern, struct _finddata_t *data) {
     free(handle);
     return -1;
 }
+
 
 int _findnext(intptr_t h, struct _finddata_t *data) {
     _find_handle_t *handle = (_find_handle_t *)h;
