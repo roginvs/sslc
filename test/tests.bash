@@ -23,8 +23,9 @@ function run_tests() {
     if [ $RETURN_CODE -eq 0 ]; then
       true # all ok
       # Debugging
-      cat $(basename -s .ssl $f).stdout
-      xxd cat $(basename -s .ssl $f).stdout
+      echo '===stdout=='
+      cat $(basename -s .ssl $f).stdout      
+      echo '==========='
     else
       ERRCODES="$ERRCODES $DIR/$f=$RETURN_CODE"
       echo "Return code is $RETURN_CODE for $DIR/$f"
