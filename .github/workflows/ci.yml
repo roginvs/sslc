@@ -28,7 +28,6 @@ jobs:
       - name: Test
         shell: bash
         run: |
-          ls -laR
           export SSLC=./Debug/sslc.exe
           bash ./test/tests.bash
 
