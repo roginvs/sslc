@@ -51,13 +51,15 @@ else
 fi
 
 echo "=== Checking for changes ==="
-DIFFS=$(git status --porcelain --untracked-files .)
+DIFFS=$(git -c core.autocrlf=false status --porcelain --untracked-files .)
 if [[ -z "${DIFFS}" ]]; then
   true # No changes, no new files
 else
-  echo "Have differences:"
-  git status
-  git diff .
+  echo "=== GIT STATUS ==="
+  git -c core.autocrlf=false status
+  echo "=== GIT DIFF ==="
+  git -c core.autocrlf=false diff .
+  echo "=== exitting with error code due to changes ==="
   exit 1
 fi
 
