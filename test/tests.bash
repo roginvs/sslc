@@ -19,8 +19,12 @@ function run_tests() {
     echo "> $DIR/$f"
     $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
     RETURN_CODE=$?
+    dos2unix $(basename -s .ssl $f).stdout
     if [ $RETURN_CODE -eq 0 ]; then
       true # all ok
+      # Debugging
+      cat $(basename -s .ssl $f).stdout
+      xxd cat $(basename -s .ssl $f).stdout
     else
       ERRCODES="$ERRCODES $DIR/$f=$RETURN_CODE"
       echo "Return code is $RETURN_CODE for $DIR/$f"
