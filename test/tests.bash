@@ -12,9 +12,9 @@ if [[ -z "${SSLC}" ]]; then
   exit 1
 fi
 
-sed -i 's/\r$//' "include/*.h" # To suppess warnings
+sed -i 's/\r$//' "include/*.h" # To suppess sslc warnings
 
-ERRCODES=""
+ERRORS=""
 
 # echo "Debug: arg=$SSLC"
 SSLC=$(realpath "$SSLC")
@@ -25,11 +25,31 @@ function run_tests() {
   OPTIMIZER_OPTS=$2
   cd $DIR
   for f in *.ssl; do
+    BNAME=$(basename -s .ssl $f)
     echo "> $DIR/$f"
-    sed -i 's/\r$//' "$f" # To suppess warnings
-    $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
+    sed -i 's/\r$//' "$f" # To suppess sslc warnings
+    $SSLC $OPTIMIZER_OPTS -I../include $f -o $BNAME.int.testrun > $BNAME.stdout.testrun
     RETURN_CODE=$?
-    sed -i 's/\r$//' $(basename -s .ssl $f).stdout
+
+    sed -i 's/\r$//' $BNAME.stdout
+    sed -i 's/\r$//' $BNAME.stdout.testrun
+    if diff $BNAME.stdout $BNAME.stdout.testrun ; then
+      true; # Stdout is equal
+    else
+      echo "===expected stdout==="
+      cat $BNAME.stdout
+      echo "===received stdout==="
+      cat $BNAME.stdout.testrun
+      ERRORS="$ERRORS $DIR/$f=STDOUT"
+    fi
+
+    if diff $BNAME.int.testrun $BNAME.int ; then
+      true; # Binary files are equal
+    else
+      echo "===.INT FILES DIFFERENT==="
+      ERRORS="$ERRORS $DIR/$f=INT"
+    fi
+
     if [ $RETURN_CODE -eq 0 ]; then
       true # all ok
       # Debugging
@@ -37,7 +57,7 @@ function run_tests() {
       cat $(basename -s .ssl $f).stdout      
       echo '==========='
     else
-      ERRCODES="$ERRCODES $DIR/$f=$RETURN_CODE"
+      ERRORS="$ERRORS $DIR/$f=$RETURN_CODE"
       echo "Return code is $RETURN_CODE for $DIR/$f"
       cat $(basename -s .ssl $f).stdout
     fi
@@ -50,24 +70,24 @@ echo "=== Running tests using $SSLC ==="
 run_tests with_optimizer "-q -p -l -O2 -d -s -n"
 
 
-if [[ -z "${ERRCODES}" ]]; then
-  true # No errors
+if [[ -z "${ERRORS}" ]]; then
+  echo "No errors"
 else
-  # echo "Error codes: $ERRCODES"
   exit 1
 fi
 
-echo "=== Checking for changes ==="
-DIFFS=$(git -c core.autocrlf=false status --porcelain --untracked-files .)
+# This checks if sslc left some temp files
+DIFFS=$(git status --porcelain --untracked-files .)
 if [[ -z "${DIFFS}" ]]; then
   true # No changes, no new files
 else
   echo "=== GIT STATUS ==="
-  git -c core.autocrlf=false status
+  git status
   echo "=== GIT DIFF ==="
-  git -c core.autocrlf=false diff .
+  git diff .
   echo "=== exitting with error code due to changes ==="
   exit 1
 fi
+
 
 echo "=== All tests passed ==="
