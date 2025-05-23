@@ -16,7 +16,7 @@ function run_tests() {
   OPTIMIZER_OPTS=$2
   cd $DIR
   for f in *.ssl; do
-    echo "> $DIR/$1"
+    echo "> $DIR/$f"
     $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
     RETURN_CODE=$?
     if [ $RETURN_CODE -eq 0 ]; then
