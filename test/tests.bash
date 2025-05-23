@@ -26,7 +26,7 @@ function run_tests() {
   cd $DIR
   for f in *.ssl; do
     BNAME=$(basename -s .ssl $f)
-    echo "> $DIR/$f"
+    echo "======================= $DIR/$f ========================"
     sed -i 's/\r$//' "$f" # To suppess sslc warnings
     $SSLC $OPTIMIZER_OPTS -I../include $f -o $BNAME.int.testrun > $BNAME.stdout.testrun
     RETURN_CODE=$?
@@ -53,9 +53,9 @@ function run_tests() {
     if [ $RETURN_CODE -eq 0 ]; then
       true # all ok
       # Debugging
-      echo '===stdout=='
-      cat $(basename -s .ssl $f).stdout      
-      echo '==========='
+      #echo '===stdout=='
+      #cat $(basename -s .ssl $f).stdout
+      #echo '==========='
     else
       ERRORS="$ERRORS $DIR/$f=$RETURN_CODE"
       echo "Return code is $RETURN_CODE for $DIR/$f"
