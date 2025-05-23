@@ -29,7 +29,7 @@ jobs:
         shell: bash
         run: |          
           export SSLC=../Debug/sslc.exe
-          (cd test && bash ./test/tests.bash)
+          (cd test && bash ./tests.bash)
 
       - name: Upload Debug
         uses: actions/upload-artifact@v4
