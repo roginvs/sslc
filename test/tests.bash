@@ -42,4 +42,14 @@ else
   exit 1
 fi
 
+echo "=== Checking no changes ==="
+DIFFS=$(git status --porcelain --untracked-files .)
+if [[ -z "${DIFFS}" ]]; then
+  true # No changes, no new files
+else
+  echo "Have differences:"
+  echo $DIFFS
+  exit 1
+fi
+
 echo "=== All tests passed ==="
