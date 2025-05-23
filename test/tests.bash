@@ -48,7 +48,8 @@ if [[ -z "${DIFFS}" ]]; then
   true # No changes, no new files
 else
   echo "Have differences:"
-  echo $DIFFS
+  git status
+  git diff .
   exit 1
 fi
 
