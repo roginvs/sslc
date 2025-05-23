@@ -17,12 +17,14 @@ function run_tests() {
   cd $DIR
   for f in *.ssl; do
     echo "Debug: running test for $DIR/$1"
-    $SSLC $OPTIMIZER_OPTS $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
+    $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
     RETURN_CODE=$?
     if [ $RETURN_CODE -eq 0 ]; then
       true # all ok
     else
       ERRCODES="$ERRCODES $DIR/$f=$RETURN_CODE"
+      echo "Return code is $RETURN_CODE for $DIR/$f"
+      cat $(basename -s .ssl $f).stdout
     fi
   done
   cd ..
@@ -36,7 +38,7 @@ run_tests with_optimizer "-q -p -l -O2 -d -s -n"
 if [[ -z "${ERRCODES}" ]]; then
   true # No errors
 else
-  echo "Error codes: $ERRCODES"
+  # echo "Error codes: $ERRCODES"
   exit 1
 fi
 
