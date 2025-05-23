@@ -77,15 +77,12 @@ else
 fi
 
 # This checks if sslc left some temp files
-DIFFS=$(git status --porcelain --untracked-files .)
-if [[ -z "${DIFFS}" ]]; then
-  true # No changes, no new files
+TMPFILES=$(find . -type f -iname '*.tmp')
+if [[ -z "${TMPFILES}" ]]; then
+  true; # Ok, no temp files
 else
-  echo "=== GIT STATUS ==="
-  git status
-  echo "=== GIT DIFF ==="
-  git diff .
-  echo "=== exitting with error code due to changes ==="
+  echo "Found some unexpected temp files:"
+  echo $TMPFILES
   exit 1
 fi
 
