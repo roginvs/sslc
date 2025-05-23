@@ -1,5 +1,12 @@
 # set -e
 
+#
+# This file runs sslc on test files in this folder
+# and returns error code if git detects some changes
+#
+#
+
+
 if [[ -z "${SSLC}" ]]; then
   echo "FAIL: No compiler env variable"
   exit 1
