@@ -7,16 +7,16 @@ fi
 
 ERRCODES=""
 
-echo "Debug: arg=$SSLC"
+# echo "Debug: arg=$SSLC"
 SSLC=$(realpath "$SSLC")
-echo "Debug: fullpath=$SSLC"
+# echo "Debug: fullpath=$SSLC"
 
 function run_tests() {
   DIR=$1
   OPTIMIZER_OPTS=$2
   cd $DIR
   for f in *.ssl; do
-    echo "Debug: running test for $DIR/$1"
+    echo "> $DIR/$1"
     $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
     RETURN_CODE=$?
     if [ $RETURN_CODE -eq 0 ]; then
@@ -42,7 +42,7 @@ else
   exit 1
 fi
 
-echo "=== Checking no changes ==="
+echo "=== Checking for changes ==="
 DIFFS=$(git status --porcelain --untracked-files .)
 if [[ -z "${DIFFS}" ]]; then
   true # No changes, no new files
