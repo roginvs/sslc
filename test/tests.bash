@@ -19,7 +19,7 @@ function run_tests() {
     echo "> $DIR/$f"
     $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
     RETURN_CODE=$?
-    dos2unix $(basename -s .ssl $f).stdout
+    sed -i 's/\r$//' $(basename -s .ssl $f).stdout
     if [ $RETURN_CODE -eq 0 ]; then
       true # all ok
       # Debugging

@@ -1,7 +1,5 @@
 Set include directory: ../include
 Compiling arrays-test.ssl
-[Warning] <arrays-test.ssl>:1: Converted [CR+LF] to [LF]
-    #include "lib.arrays.h"
 [Warning] <arrays-test.ssl>:204: End of input with no newline, supplemented newline
     end
 [Message] <arrays-test.ssl>:158:66: Eliminating procedure map_contains_key
