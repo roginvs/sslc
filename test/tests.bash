@@ -5,6 +5,8 @@ if [[ -z "${SSLC}" ]]; then
   exit 1
 fi
 
+sed -i 's/\r$//' "include/*.h" # To suppess warnings
+
 ERRCODES=""
 
 # echo "Debug: arg=$SSLC"
@@ -17,6 +19,7 @@ function run_tests() {
   cd $DIR
   for f in *.ssl; do
     echo "> $DIR/$f"
+    sed -i 's/\r$//' "$DIR/$f" # To suppess warnings
     $SSLC $OPTIMIZER_OPTS -I../include $f -o $(basename -s .ssl $f).int > $(basename -s .ssl $f).stdout
     RETURN_CODE=$?
     sed -i 's/\r$//' $(basename -s .ssl $f).stdout
