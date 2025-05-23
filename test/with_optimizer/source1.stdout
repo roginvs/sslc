@@ -1,0 +1,3 @@
+Compiling source1.ssl
+[Warning] <source1.ssl>:2: End of input with no newline, supplemented newline
+    end
