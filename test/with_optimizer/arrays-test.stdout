@@ -1,0 +1,107 @@
+Set include directory: ../include
+Compiling arrays-test.ssl
+[Warning] <arrays-test.ssl>:1: Converted [CR+LF] to [LF]
+    #include "lib.arrays.h"
+[Warning] <arrays-test.ssl>:204: End of input with no newline, supplemented newline
+    end
+[Message] <arrays-test.ssl>:158:66: Eliminating procedure map_contains_key
+[Message] <arrays-test.ssl>:183:58: Eliminating procedure array_push
+[Message] <arrays-test.ssl>:192:42: Eliminating procedure array_pop
+[Message] <arrays-test.ssl>:203:43: Eliminating procedure array_keys
+[Message] <arrays-test.ssl>:215:45: Eliminating procedure array_values
+[Message] <arrays-test.ssl>:227:76: Eliminating procedure array_slice
+[Message] <arrays-test.ssl>:244:74: Eliminating procedure array_cut
+[Message] <arrays-test.ssl>:261:57: Eliminating procedure array_diff
+[Message] <arrays-test.ssl>:279:105: Eliminating procedure copy_array
+[Message] <arrays-test.ssl>:289:44: Eliminating procedure clone_array
+[Message] <arrays-test.ssl>:322:40: Eliminating procedure array_max
+[Message] <arrays-test.ssl>:333:40: Eliminating procedure array_min
+[Message] <arrays-test.ssl>:344:40: Eliminating procedure array_sum
+[Message] <arrays-test.ssl>:353:49: Eliminating procedure array_random_value
+[Message] <arrays-test.ssl>:461:87: Eliminating procedure array_fill
+[Message] <arrays-test.ssl>:471:59: Eliminating procedure array_append
+[Message] <arrays-test.ssl>:169:54: Eliminating procedure get_empty_array_index
+[Message] <arrays-test.ssl>:358:61: Eliminating procedure add_array_set
+[Message] <arrays-test.ssl>:382:64: Eliminating procedure remove_array_set
+[Message] <arrays-test.ssl>:418:66: Eliminating procedure add_array_block
+[Message] <arrays-test.ssl>:447:85: Eliminating procedure remove_array_block
+[Message] <arrays-test.ssl>:486:64: Eliminating procedure load_create_array
+[Message] <arrays-test.ssl>:496:66: Eliminating procedure get_saved_array_new
+[Message] <arrays-test.ssl>:508:61: Eliminating procedure save_collection
+[Message] <arrays-test.ssl>:523:47: Eliminating procedure load_collection
+[Message] <arrays-test.ssl>:404:64: Eliminating procedure array_map_func
+[Message] <arrays-test.ssl>:612:40: Eliminating procedure _PURGE_all_saved_arrays
+[Message] <arrays-test.ssl>:19:71: Eliminating procedure assertNotEquals
+[Message] <arrays-test.ssl>:303:28: Folding constant unary expression
+[Message] <arrays-test.ssl>:303:60: Folding constant unary expression
+[Message] <arrays-test.ssl>:308:5: Using constant variable store for initializer
+[Message] <arrays-test.ssl>:308:8: Eating dead store to variable 3
+[Message] <arrays-test.ssl>:319:4: Eating statement hidden by return
+[Message] <arrays-test.ssl>:589:27: Folding constant unary expression
+[Message] <arrays-test.ssl>:610:4: Eating statement hidden by return
+[Message] <arrays-test.ssl>:52:57: Folding constant unary expression
+[Message] <arrays-test.ssl>:53:54: Folding constant unary expression
+[Message] <arrays-test.ssl>:68:66: Folding constant unary expression
+[Message] <arrays-test.ssl>:72:39: Folding constant binary expression
+[Message] <arrays-test.ssl>:75:60: Folding constant unary expression
+[Message] <arrays-test.ssl>:76:41: Folding constant binary expression
+[Message] <arrays-test.ssl>:87:50: Folding constant unary expression
+[Message] <arrays-test.ssl>:91:29: Folding constant unary expression
+[Message] <arrays-test.ssl>:92:24: Folding constant unary expression
+[Message] <arrays-test.ssl>:93:55: Folding constant unary expression
+[Message] <arrays-test.ssl>:96:24: Folding constant unary expression
+[Message] <arrays-test.ssl>:98:24: Folding constant unary expression
+[Message] <arrays-test.ssl>:100:24: Folding constant unary expression
+[Message] <arrays-test.ssl>:109:32: Folding constant binary expression
+[Message] <arrays-test.ssl>:113:68: Folding constant binary expression
+[Message] <arrays-test.ssl>:117:26: Folding constant unary expression
+[Message] <arrays-test.ssl>:118:49: Folding constant unary expression
+[Message] <arrays-test.ssl>:125:10: Folding constant unary expression
+[Message] <arrays-test.ssl>:126:48: Folding constant unary expression
+[Message] <arrays-test.ssl>:131:10: Folding constant unary expression
+[Message] <arrays-test.ssl>:136:60: Folding constant unary expression
+[Message] <arrays-test.ssl>:109:10: Using constant variable store for initializer
+[Message] <arrays-test.ssl>:109:13: Eating dead store to variable 1
+[Message] <arrays-test.ssl>:157:26: Using constant variable store for initializer
+[Message] <arrays-test.ssl>:157:26: Eating dead store to variable 8
+[Message] <arrays-test.ssl>:163:29: Using constant variable store for initializer
+[Message] <arrays-test.ssl>:163:29: Eating dead store to variable 11
+[Message] <arrays-test.ssl>:34:33: Eliminating variable id 3
+[Message] <arrays-test.ssl>:34:33: Eliminating variable id 2
+[Message] <arrays-test.ssl>:14:36: Constant propagating global variable test_suite_verbose
+[Message] <arrays-test.ssl>:103:27: Constant propagating global variable test_suite_verbose
+[Message] <none>:-1: Eliminating unused global variable test_suite_verbose
+[Message] <arrays-test.ssl>:14:47: Eliminating constant if expression (true)
+[Message] <arrays-test.ssl>:103:45: Eliminating constant if expression (true)
+[Message] <none>:-1: Removing unused string 'assertNotEquals' from program namespace
+[Message] <none>:-1: Removing unused string 'test_suite_verbose' from program namespace
+[Message] <none>:-1: Removing unused string '_PURGE_all_saved_arrays' from program namespace
+[Message] <none>:-1: Removing unused string 'array_map_func' from program namespace
+[Message] <none>:-1: Removing unused string 'load_collection' from program namespace
+[Message] <none>:-1: Removing unused string 'save_collection' from program namespace
+[Message] <none>:-1: Removing unused string 'get_saved_array_new' from program namespace
+[Message] <none>:-1: Removing unused string 'load_create_array' from program namespace
+[Message] <none>:-1: Removing unused string 'remove_array_block' from program namespace
+[Message] <none>:-1: Removing unused string 'add_array_block' from program namespace
+[Message] <none>:-1: Removing unused string 'remove_array_set' from program namespace
+[Message] <none>:-1: Removing unused string 'add_array_set' from program namespace
+[Message] <none>:-1: Removing unused string 'get_empty_array_index' from program namespace
+[Message] <none>:-1: Removing unused string 'array_append' from program namespace
+[Message] <none>:-1: Removing unused string 'array_fill' from program namespace
+[Message] <none>:-1: Removing unused string 'array_random_value' from program namespace
+[Message] <none>:-1: Removing unused string 'array_sum' from program namespace
+[Message] <none>:-1: Removing unused string 'array_min' from program namespace
+[Message] <none>:-1: Removing unused string 'array_max' from program namespace
+[Message] <none>:-1: Removing unused string 'clone_array' from program namespace
+[Message] <none>:-1: Removing unused string 'copy_array' from program namespace
+[Message] <none>:-1: Removing unused string 'array_diff' from program namespace
+[Message] <none>:-1: Removing unused string 'array_cut' from program namespace
+[Message] <none>:-1: Removing unused string 'array_slice' from program namespace
+[Message] <none>:-1: Removing unused string 'array_values' from program namespace
+[Message] <none>:-1: Removing unused string 'array_keys' from program namespace
+[Message] <none>:-1: Removing unused string 'array_pop' from program namespace
+[Message] <none>:-1: Removing unused string 'array_push' from program namespace
+[Message] <none>:-1: Removing unused string 'map_contains_key' from program namespace
+[Message] <none>:-1: Removing unused string ' == ' from program stringspace
+[Message] <none>:-1: Removing unused string '...all_arrays...' from program stringspace
+[Message] <none>:-1: Removing unused string '.' from program stringspace
