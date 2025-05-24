@@ -31,6 +31,16 @@ jobs:
           export SSLC=../Debug/sslc.exe
           (cd test && bash ./tests.bash)
 
+      - name: Test on Fallout RPU
+        # Skip this, run huge test only on release build
+        if: false
+        shell: bash
+        run: |
+          export SSLC=../Debug/sslc.exe
+          pwd
+          ls
+          (cd test && ls -la && bash ./test_on_fallout2_rpu.bash)
+
       - name: Upload Debug
         uses: actions/upload-artifact@v4
         with:
@@ -59,6 +69,12 @@ jobs:
         run: |
           export SSLC=../Build/compile.exe
           (cd test && bash ./tests.bash)
+
+      - name: Test on Fallout RPU
+        shell: bash
+        run: |
+          export SSLC=../Build/compile.exe
+          (cd test && bash ./test_on_fallout2_rpu.bash)
 
       - name: Upload Release
         uses: actions/upload-artifact@v4
@@ -145,23 +161,37 @@ jobs:
     defaults:
       run:
         shell: bash
-    container:
-      image: emscripten/emsdk:4.0.8
+    # container:
+    #  image: emscripten/emsdk:4.0.8
     steps:
       - name: Clone
         uses: actions/checkout@v4
 
       - name: Build wasm module
         run: |
-          mkdir -p build
-          cd build
-          emcmake cmake .. -DCMAKE_BUILD_TYPE="Release"
-          emmake make
+          docker run --rm --user $(id -u):$(id -g) \
+          -v $(pwd):/src emscripten/emsdk:4.0.8 \
+          sh -c 'mkdir -p build && cd build && emcmake cmake -DCMAKE_BUILD_TYPE="Release" ../ && emmake make'
+          
+          # mkdir -p build
+          # cd build
+          # emcmake cmake .. -DCMAKE_BUILD_TYPE="Release"
+          # emmake make
 
       - name: Test
         run: |
           export SSLC=../build/bin/compiler.mjs
           (cd test && bash ./tests.bash)
+
+
+      - name: Test on Fallout RPU
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install -y wine32 p7zip-full
+          export SSLC=../build/bin/compiler.mjs
+          export WINE=wine
+          (cd test && bash ./test_on_fallout2_rpu.bash)
 
       - name: Upload .wasm artifacts
         uses: actions/upload-artifact@v4
@@ -197,6 +227,15 @@ jobs:
         run: |
           export SSLC=../out/bin/sslc
           (cd test && bash ./tests.bash)
+
+      - name: Test on Fallout RPU
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt update
+          sudo apt install -y wine32 p7zip-full
+          export SSLC=../out/bin/sslc
+          export WINE=wine
+          (cd test && bash ./test_on_fallout2_rpu.bash)
 
       - name: Upload
         uses: actions/upload-artifact@v4
