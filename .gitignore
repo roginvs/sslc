@@ -2,6 +2,7 @@
 .vs/
 Build/
 build/
+build-wasi/
 Debug/
 Release/
 ReleaseDLL/
