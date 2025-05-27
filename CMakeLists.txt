@@ -29,8 +29,9 @@ set(SOURCES
 
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
-
-if(${CMAKE_SYSTEM_NAME} MATCHES "Emscripten")
+if(CMAKE_SYSTEM_NAME MATCHES "WASI")
+  add_definitions(-DNO_LONG_JMP)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Emscripten")
   set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -g")
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 
