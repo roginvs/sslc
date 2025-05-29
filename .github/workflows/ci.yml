@@ -323,6 +323,12 @@ jobs:
 
           ls -laR
 
+          mv wasm-wasi package
+          tar -czf wasm-wasi.tar.gz package
+          rm -rf package
+
+          ls -laR
+
           mv windows-debug/Debug/sslc.exe sslc-debug.exe
           rm -rf windows-debug
 
