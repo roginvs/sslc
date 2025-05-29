@@ -142,7 +142,6 @@ jobs:
     defaults:
       run:
         shell: bash
-    if: false # Disable this job because WASI do not support setjmp/longjmp
     env:
       WASI_VERSION: "25"
       WASI_VERSION_FULL: "25.0"
@@ -171,12 +170,31 @@ jobs:
           make
           find .
 
+      - name: Test
+        run: |
+          export SSLC=../build/bin/wasi.mjs
+          (cd test && bash ./tests.bash)
+
+      - name: Get cache RPU & modderspack
+        uses: actions/cache@v4
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
+        with:
+          path: test/gamescripts
+          key: rpu-and-modderpack-gamescripts-v1004
+          fail-on-cache-miss: true
+      - name: Test on Fallout RPU
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
+        run: |
+          export SSLC=../build/bin/wasi.mjs
+          (cd test && bash ./test_on_fallout2_rpu_run.bash)
+
+
       - name: Upload WebAssembly artifact
         uses: actions/upload-artifact@v4
         with:
           name: wasm-wasi
           path: |
-            build/**/*.wasm
+            build/**/*
 
   build_emscripten:
     name: Build webassembly version (Emscripten)
