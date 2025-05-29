@@ -135,7 +135,7 @@ jobs:
       #     path: |
       #       **/Win2K*/*.exe
 
-  build-wasm:
+  build_wasi:
     name: WebAssembly (WASI) Build
     runs-on: ubuntu-22.04
     needs: [setup_rpu_tests]    
@@ -303,7 +303,7 @@ jobs:
   release:
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
-    needs: [build_windows, build_linux, build_emscripten]
+    needs: [build_windows, build_linux, build_emscripten, build_wasi]
     permissions: write-all
     steps:
       - name: Download all artifacts
