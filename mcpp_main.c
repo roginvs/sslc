@@ -196,8 +196,8 @@
     #ifndef NO_LONG_JMP
     jmp_buf error_exit;             /* Exit on fatal error          */
     #else
-    void (*)(void *) jmp_buf_callback
-    void * jmp_buf_arg;
+    void (*)(void *) error_exit_callback_next;
+    void * error_exit_next_arg;
     #endif
 /*
  * Translation limits specified by C90, C99 or C++.
@@ -233,6 +233,24 @@
  *              on some special cases.
  */
 static int      src_col = 0;        /* Column number of source line */
+
+#ifdef NO_LONG_JMP
+void error_exit_callback() {
+    /* Free malloced memory */
+    clear_filelist();
+    clear_symtable();
+
+    if (errors > 0 && option_flags.no_source_line == FALSE) {
+        mcpp_fprintf( ERR, "%d error%s in preprocessor.\n",
+                errors, (errors == 1) ? "" : "s");
+    }
+    
+    error_exit_callback_next(error_exit_next_arg);
+
+    /* Exit with error code if not exitted in callback */
+    exit(1);
+}
+#endif
 
 #define MBCHAR_IS_ESCAPE_FREE   TRUE
 
@@ -288,14 +306,24 @@ int     mcpp_lib_main
 	const char* dir,
 	const char* def,
 	const char* include_dir
+#ifdef NO_LONG_JMP
+    ,
+    (*error_exit_callback)(void *) error_exit_callback
+    void * error_exit_arg;
+#endif
 )
 {
     const char *  stdin_name = "<stdin>";
 
+    #ifndef NO_LONG_JMP
     if (setjmp( error_exit) == -1) {
         errors++;
         goto  fatal_error_exit;
     }
+    #else
+    error_exit_callback_next = error_exit_callback;
+    error_exit_next_arg = error_exit_arg;
+    #endif
 
     /* Initialize global and static variables.  */
     init_main();

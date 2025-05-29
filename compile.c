@@ -55,8 +55,28 @@ static void PrintLogo() {
 }
 
 extern int warn_level; // the mcpp warning level
-extern int mcpp_lib_main(FILE *fin, FILE *fout, const char* in_file, const char* dir, const char* def, const char* include_dir);
+extern int mcpp_lib_main(
+	FILE *fin, FILE *fout,
+	const char* in_file,
+	const char* dir,
+	const char* def,
+	const char* include_dir
+#ifdef NO_LONG_JMP
+	,
+	void (*error_exit_callback)(void *),
+	void * error_exit_arg;
+#endif	
+);
 extern void mcpp_add_include_dir(char*);
+
+void print_preprocessing_error_and_exit(void* arg){
+	char* name = (char*)arg;
+	if (name == NULL) {
+		name = "<INTERNAL ERROR>";
+	}
+	parseOutput("*** An error occured during preprocessing of %s ***\n", name);
+    exit(1);
+}
 
 #ifndef BUILDING_DLL
 int main(int argc, char **argv)
@@ -240,7 +260,19 @@ int main(int argc, char **argv)
 #endif
 //#endif
 					}
-					if(mcpp_lib_main(foo.file, newfile, buf.name, buf.name, defMacro, includeDir)) {
+					if(mcpp_lib_main(
+						foo.file,
+						newfile,
+						buf.name,
+						buf.name,
+						defMacro,
+						includeDir
+#ifdef NO_LONG_JMP
+    ,
+    print_preprocessing_error_and_exit,
+	buf.name
+#endif						
+					)) {
 						parseOutput("*** An error occured during preprocessing of %s ***\n", buf.name);
 						return 1;
 					}

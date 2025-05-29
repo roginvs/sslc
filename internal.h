@@ -359,8 +359,7 @@ extern long     in_asm;             /* In #asm - #endasm block      */
 #ifndef NO_LONG_JMP
 extern jmp_buf  error_exit;         /* Exit on fatal error          */
 #else
-extern void (*)(void *) jmp_buf_callback
-extern void * jmp_buf_arg;
+extern void error_exit_callback();
 #endif
 extern const char *   cur_fullname;       /* Full name of current source  */
 extern char *   workp;              /* Free space in work[]         */
