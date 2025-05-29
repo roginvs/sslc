@@ -150,6 +150,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Download wasi-sdk
         run: |
           curl -L https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-${{env.WASI_VERSION}}/wasi-sdk-${{env.WASI_VERSION_FULL}}-x86_64-linux.tar.gz | tar xz
