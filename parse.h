@@ -109,7 +109,9 @@ typedef struct {
    int numProcedures;
 } ProcedureList;
 
+#ifndef NO_LONG_JMP
 #include <setjmp.h>
+#endif
 
 typedef struct {
    ProcedureList procedures;
