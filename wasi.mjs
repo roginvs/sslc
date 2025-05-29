@@ -3,6 +3,7 @@
 import { readFileSync } from "fs";
 import { WASI } from "wasi";
 import path from "path";
+import { fileURLToPath } from "url";
 
 process.removeAllListeners("warning").on("warning", (err) => {
   if (
@@ -23,14 +24,13 @@ const wasi = new WASI({
 });
 
 (async () => {
-    console.info(`DEBUG dirname=${typeof __dirname !== "undefined" ? __dirname : "undef"} import=${import.meta.dirname}`);
+  const dirname =
+    typeof __dirname !== "undefined"
+      ? __dirname
+      : path.dirname(fileURLToPath(import.meta.url));
+
   const wasm = await WebAssembly.compile(
-    readFileSync(
-      path.join(
-        typeof __dirname !== "undefined" ? __dirname : import.meta.dirname,
-        "sslc.wasm"
-      )
-    )
+    readFileSync(path.join(dirname, "sslc.wasm"))
   );
   const instance = await WebAssembly.instantiate(wasm, wasi.getImportObject());
 
