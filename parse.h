@@ -138,7 +138,7 @@ extern void parse(
 #ifdef NO_LONG_JMP
     ,
     void (*error_exit_callback)(void *),
-    void * error_exit_arg;
+    void * error_exit_arg
 #endif	
 );
 extern void dumpProgram(Program *);

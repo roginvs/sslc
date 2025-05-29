@@ -64,7 +64,7 @@ extern int mcpp_lib_main(
 #ifdef NO_LONG_JMP
 	,
 	void (*error_exit_callback)(void *),
-	void * error_exit_arg;
+	void * error_exit_arg
 #endif	
 );
 extern void mcpp_add_include_dir(char*);
