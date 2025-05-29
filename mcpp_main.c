@@ -240,6 +240,8 @@ void mcpp_error_exit_callback() {
     clear_filelist();
     clear_symtable();
 
+    errors++;
+
     if (errors > 0 && option_flags.no_source_line == FALSE) {
         mcpp_fprintf( ERR, "%d error%s in preprocessor.\n",
                 errors, (errors == 1) ? "" : "s");
