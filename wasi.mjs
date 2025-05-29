@@ -21,6 +21,7 @@ const wasi = new WASI({
   preopens: {
     "/": "/",
   },
+  // TODO: Add cwd! It fails because default cwd is /
 });
 
 (async () => {
