@@ -24,7 +24,12 @@ const wasi = new WASI({
 
 (async () => {
   const wasm = await WebAssembly.compile(
-    readFileSync(path.join(import.meta.dirname, "sslc.wasm"))
+    readFileSync(
+      path.join(
+        typeof __dirname !== "undefined" ? __dirname : import.meta.dirname,
+        "sslc.wasm"
+      )
+    )
   );
   const instance = await WebAssembly.instantiate(wasm, wasi.getImportObject());
 
