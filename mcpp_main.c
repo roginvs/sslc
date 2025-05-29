@@ -192,8 +192,13 @@
     FILE *  fp_debug;               /* Debugging information stream */
 
 /* Variables on multi-byte character encodings. */
-    jmp_buf error_exit;             /* Exit on fatal error          */
 
+    #ifndef NO_LONG_JMP
+    jmp_buf error_exit;             /* Exit on fatal error          */
+    #else
+    void (*)(void *) jmp_buf_callback
+    void * jmp_buf_arg;
+    #endif
 /*
  * Translation limits specified by C90, C99 or C++.
  */

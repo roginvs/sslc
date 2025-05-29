@@ -120,7 +120,12 @@ typedef struct {
                             // or imported to this module
    char *stringspace;   /* this program's string space */
    char *namelist;     /* this program's global namelist */
+   #ifndef NO_LONG_JMP
    jmp_buf env;
+   #else
+   void (*jmp_buf_callback)(void *);
+   void * jmp_buf_arg;
+   #endif
    //jmp_buf stmtEnv;
 } Program;
 
