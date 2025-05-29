@@ -23,6 +23,7 @@ const wasi = new WASI({
 });
 
 (async () => {
+    console.info(`DEBUG dirname=${typeof __dirname !== "undefined" ? __dirname : "undef"} import=${import.meta.dirname}`);
   const wasm = await WebAssembly.compile(
     readFileSync(
       path.join(
