@@ -34,5 +34,6 @@ const wasi = new WASI({
   );
   const instance = await WebAssembly.instantiate(wasm, wasi.getImportObject());
 
-  wasi.start(instance);
+  const returnCode = wasi.start(instance);
+  process.exit(returnCode);
 })();
