@@ -168,7 +168,7 @@ jobs:
       - name: Build project
         run: |
           cd build
-          cmake --build .
+          make
           find .
 
       - name: Upload WebAssembly artifact
