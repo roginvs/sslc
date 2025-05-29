@@ -1930,7 +1930,11 @@ void    cfatal(
  */
 {
     do_msg( "[Error]", format, arg1, arg2, arg3);
+#ifndef NO_LONG_JMP
     longjmp( error_exit, -1);
+#else
+    error_exit_callback();
+#endif
 }
 
 void    cerror(

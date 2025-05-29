@@ -123,15 +123,24 @@ typedef struct {
    #ifndef NO_LONG_JMP
    jmp_buf env;
    #else
-   void (*jmp_buf_callback)(void *);
-   void * jmp_buf_arg;
+   void (*error_exit_callback)(void *);
+   void * error_exit_arg;
+   const char *output;
    #endif
    //jmp_buf stmtEnv;
 } Program;
 
 #include "lex.h"
 
-extern void parse(InputStream *, const char *);
+extern void parse(
+   InputStream *,
+   const char *
+#ifdef NO_LONG_JMP
+    ,
+    void (*error_exit_callback)(void *),
+    void * error_exit_arg;
+#endif	
+);
 extern void dumpProgram(Program *);
 
 extern void parseStatement(Procedure *p);

@@ -196,7 +196,7 @@
     #ifndef NO_LONG_JMP
     jmp_buf error_exit;             /* Exit on fatal error          */
     #else
-    void (*)(void *) error_exit_callback_next;
+    void (*error_exit_callback_next)(void *);
     void * error_exit_next_arg;
     #endif
 /*
@@ -308,8 +308,8 @@ int     mcpp_lib_main
 	const char* include_dir
 #ifdef NO_LONG_JMP
     ,
-    (*error_exit_callback)(void *) error_exit_callback
-    void * error_exit_arg;
+    void (*error_exit_callback)(void *),
+    void * error_exit_arg
 #endif
 )
 {

@@ -79,6 +79,16 @@ void print_preprocessing_error_and_exit(void* arg){
 }
 
 #ifndef BUILDING_DLL
+
+#ifdef NO_LONG_JMP
+void print_parse_error_and_exit(void* arg){
+	parseOutput("\n*** THERE WERE ERRORS (%u of them) ***\n", compilerErrorTotal);
+	if (!noinputwait)
+		getchar();
+	exit(1);
+}
+#endif
+
 int main(int argc, char **argv)
 {
 	InputStream foo;
@@ -282,7 +292,13 @@ int main(int argc, char **argv)
 				}
 #endif
 				if(!onlypreprocess) {
-					parse(&foo, name);
+					parse(
+						&foo,
+						name
+#ifdef NO_LONG_JMP
+						, print_parse_error_and_exit, NULL
+#endif
+				    );
 					freeCurrentProgram();
 				}
 				fclose(foo.file);
