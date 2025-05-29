@@ -1933,7 +1933,7 @@ void    cfatal(
 #ifndef NO_LONG_JMP
     longjmp( error_exit, -1);
 #else
-    error_exit_callback();
+    mcpp_error_exit_callback();
 #endif
 }
 

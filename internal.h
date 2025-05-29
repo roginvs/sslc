@@ -38,6 +38,10 @@
     #error "system.H" must be included prior to "internal.H"
 #endif
 
+#ifdef NO_LONG_JMP
+void mcpp_error_exit_callback();
+#endif
+
 /* Choices for output destination */
 typedef enum {
     OUT,                        /* ~= fp_out    */

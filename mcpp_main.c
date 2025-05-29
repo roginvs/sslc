@@ -196,8 +196,8 @@
     #ifndef NO_LONG_JMP
     jmp_buf error_exit;             /* Exit on fatal error          */
     #else
-    void (*error_exit_callback_next)(void *);
-    void * error_exit_next_arg;
+    void (*mcpp_error_exit_callback_next)(void *);
+    void * mcpp_error_exit_next_arg;
     #endif
 /*
  * Translation limits specified by C90, C99 or C++.
@@ -235,7 +235,7 @@
 static int      src_col = 0;        /* Column number of source line */
 
 #ifdef NO_LONG_JMP
-void error_exit_callback() {
+void mcpp_error_exit_callback() {
     /* Free malloced memory */
     clear_filelist();
     clear_symtable();
@@ -245,7 +245,7 @@ void error_exit_callback() {
                 errors, (errors == 1) ? "" : "s");
     }
     
-    error_exit_callback_next(error_exit_next_arg);
+    mcpp_error_exit_callback_next(mcpp_error_exit_next_arg);
 
     /* Exit with error code if not exitted in callback */
     exit(1);
@@ -321,8 +321,8 @@ int     mcpp_lib_main
         goto  fatal_error_exit;
     }
     #else
-    error_exit_callback_next = error_exit_callback;
-    error_exit_next_arg = error_exit_arg;
+    mcpp_error_exit_callback_next = error_exit_callback;
+    mcpp_error_exit_next_arg = error_exit_arg;
     #endif
 
     /* Initialize global and static variables.  */
