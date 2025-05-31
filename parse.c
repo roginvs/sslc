@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#ifndef NO_LONG_JMP
 #include <setjmp.h>
+#endif
 
 #include "parse.h"
 #include "parselib.h"
@@ -93,6 +95,24 @@ int parseOutput(const char *format, ...) {
 }
 
 #else
+
+#ifdef NO_LONG_JMP
+static void freeProgram(Program *s);
+void parse_error_exit() {
+	void (*error_exit_callback)(void *) = currentProgram->error_exit_callback;
+	void * error_exit_arg = currentProgram->error_exit_arg;
+	const char *output = currentProgram->output;
+ 
+	freeProgram(currentProgram);
+	currentProgram = 0;
+	lexClose();
+	if (output)
+		remove( output);
+	
+	error_exit_callback(error_exit_arg);
+	exit(1);
+}
+#endif
 
 int outputStr(const char *s) {
 	fprintf(stdout, "%s", s);
@@ -192,8 +212,11 @@ void parseErrorAtNode(const Node* node, const char *format, ...) {
 	va_end(arg);
 
 	compilerErrorTotal++;
-
+#ifndef NO_LONG_JMP
 	longjmp(currentProgram->env, 1);
+#else
+    parse_error_exit();
+#endif
 }
 void parseError(const char *format, ...) {
 	char buf[256];
@@ -210,7 +233,11 @@ void parseError(const char *format, ...) {
 
 	compilerErrorTotal++;
 
+#ifndef NO_LONG_JMP
 	longjmp(currentProgram->env, 1);
+#else
+    parse_error_exit();
+#endif
 }
 
 void parseSemanticError(const char *format, ...) {
@@ -229,7 +256,12 @@ void parseSemanticError(const char *format, ...) {
 #ifndef BUILDING_DLL
 	compilerErrorTotal++;
 
+#ifndef NO_LONG_JMP
 	longjmp(currentProgram->env, 1);
+#else
+    parse_error_exit();
+#endif
+
 #else
 	compilerSyntaxError = 1;
 #endif
@@ -1973,7 +2005,15 @@ void dumpAllNodes(const char* fileName) {
 	fclose(f);
 }
 
-void parse(InputStream *stream, const char *output) {
+void parse(
+	InputStream *stream,
+	const char *output
+#ifdef NO_LONG_JMP
+    ,
+    void (*error_exit_callback)(void *),
+    void * error_exit_arg
+#endif	
+) {
 	initLex();
 	startLex(stream);
 	currentProgram = (Program*)malloc(sizeof(Program));
@@ -1989,6 +2029,7 @@ void parse(InputStream *stream, const char *output) {
 	// bogus procedure so we never have a zero procedure offset
 	addProcedure(&currentProgram->procedures, &currentProgram->namelist, "..............");
 
+#ifndef NO_LONG_JMP
 	if (setjmp(currentProgram->env)) {
 		freeProgram(currentProgram);
 		currentProgram = 0;
@@ -1997,6 +2038,10 @@ void parse(InputStream *stream, const char *output) {
 			remove( output);
 		return;
 	}
+#else
+	currentProgram->error_exit_callback = error_exit_callback;
+	currentProgram->error_exit_arg = error_exit_arg;
+#endif
 
 	if (top()) {
 		freeProgram(currentProgram);

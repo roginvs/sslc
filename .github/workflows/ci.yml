@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: test/gamescripts
-          key: rpu-and-modderpack-gamescripts-v1004
+          key: rpu-and-modderpack-gamescripts-v1005
 
       - name: Download RPU scripts & modderspack
         if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
@@ -97,7 +97,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: test/gamescripts
-          key: rpu-and-modderpack-gamescripts-v1004
+          key: rpu-and-modderpack-gamescripts-v1005
       - name: Download RPU scripts & modderspack
         if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
         shell: bash
@@ -151,14 +151,13 @@ jobs:
       #     path: |
       #       **/Win2K*/*.exe
 
-  build-wasm:
+  build_wasi:
     name: WebAssembly (WASI) Build
     runs-on: ubuntu-22.04
     needs: [setup_rpu_tests]    
     defaults:
       run:
         shell: bash
-    if: false # Disable this job because WASI do not support setjmp/longjmp
     env:
       WASI_VERSION: "25"
       WASI_VERSION_FULL: "25.0"
@@ -166,6 +165,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Download wasi-sdk
         run: |
@@ -184,15 +188,34 @@ jobs:
       - name: Build project
         run: |
           cd build
-          cmake --build .
+          make
           find .
+
+      - name: Test
+        run: |
+          export SSLC=../build/bin/wasi.mjs
+          (cd test && bash ./tests.bash)
+
+      - name: Get cache RPU & modderspack
+        uses: actions/cache@v4
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
+        with:
+          path: test/gamescripts
+          key: rpu-and-modderpack-gamescripts-v1005
+          fail-on-cache-miss: true
+      - name: Test on Fallout RPU
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
+        run: |
+          export SSLC=../build/bin/wasi.mjs
+          (cd test && bash ./test_on_fallout2_rpu_run.bash)
+
 
       - name: Upload WebAssembly artifact
         uses: actions/upload-artifact@v4
         with:
           name: wasm-wasi
           path: |
-            build/**/*.wasm
+            build/**/*
 
   build_emscripten:
     name: Build webassembly version (Emscripten)
@@ -234,7 +257,7 @@ jobs:
         if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
         with:
           path: test/gamescripts
-          key: rpu-and-modderpack-gamescripts-v1004
+          key: rpu-and-modderpack-gamescripts-v1005
           fail-on-cache-miss: true
       - name: Test on Fallout RPU
         if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
@@ -283,7 +306,7 @@ jobs:
         if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
         with:
           path: test/gamescripts
-          key: rpu-and-modderpack-gamescripts-v1004
+          key: rpu-and-modderpack-gamescripts-v1005
           fail-on-cache-miss: true
       - name: Test on Fallout RPU
         if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'skip-rpu-check')
@@ -301,7 +324,7 @@ jobs:
   release:
     if: github.event_name == 'push'
     runs-on: ubuntu-22.04
-    needs: [build_windows, build_linux, build_emscripten]
+    needs: [build_windows, build_linux, build_emscripten, build_wasi]
     permissions: write-all
     steps:
       - name: Download all artifacts
@@ -317,6 +340,12 @@ jobs:
 
           mv wasm-emscripten-node-nodefs package
           tar -czf wasm-emscripten-node-nodefs.tar.gz package
+          rm -rf package
+
+          ls -laR
+
+          mv wasm-wasi package
+          tar -czf wasm-wasi.tar.gz package
           rm -rf package
 
           ls -laR
