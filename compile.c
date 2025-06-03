@@ -91,6 +91,19 @@ void print_parse_error_and_exit(void* arg){
 
 int main(int argc, char **argv)
 {
+#ifdef NO_LONG_JMP
+	char *pwd = getenv("PWD");
+    if (pwd == NULL) {
+        fprintf(stderr, "PWD environment variable not found\n");
+        return 1;
+    }
+    if (chdir(pwd)) {
+        perror("chdir failed");
+        return 1;
+    }
+#endif
+
+
 	InputStream foo;
 	char name[260], *c, *file;
 	struct FINDDATA buf;
