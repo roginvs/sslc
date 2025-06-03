@@ -200,4 +200,6 @@
 #include    "string.h"
 #include    "stdlib.h"
 #include    "time.h"
+#ifndef NO_LONG_JMP
 #include    "setjmp.h"
+#endif

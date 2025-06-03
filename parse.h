@@ -109,7 +109,9 @@ typedef struct {
    int numProcedures;
 } ProcedureList;
 
+#ifndef NO_LONG_JMP
 #include <setjmp.h>
+#endif
 
 typedef struct {
    ProcedureList procedures;
@@ -118,13 +120,27 @@ typedef struct {
                             // or imported to this module
    char *stringspace;   /* this program's string space */
    char *namelist;     /* this program's global namelist */
+   #ifndef NO_LONG_JMP
    jmp_buf env;
+   #else
+   void (*error_exit_callback)(void *);
+   void * error_exit_arg;
+   const char *output;
+   #endif
    //jmp_buf stmtEnv;
 } Program;
 
 #include "lex.h"
 
-extern void parse(InputStream *, const char *);
+extern void parse(
+   InputStream *,
+   const char *
+#ifdef NO_LONG_JMP
+    ,
+    void (*error_exit_callback)(void *),
+    void * error_exit_arg
+#endif	
+);
 extern void dumpProgram(Program *);
 
 extern void parseStatement(Procedure *p);
