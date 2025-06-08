@@ -842,6 +842,10 @@ static int writeStatement(NodeList *n, int i, FILE *f) {
 			i++;
 			break;
 		case T_BREAK:
+			// "break" statement is only allowed inside for/foreach/while loops.
+			// All of them are implemented using O_WHILE which requires stack
+			// to have an address where to jump when condition is false.
+			// So we just using this address to jump to the end of loop.
 			writeOp(O_JMP, f);
 			i++;
 			break;
