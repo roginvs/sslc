@@ -1,0 +1,35 @@
+procedure map_enter_p_proc begin
+    noop;
+    while (1) do begin
+        break;
+    end
+    noop;
+end
+
+
+procedure start begin
+    display_msg("Testing break in foreach loop...");
+    variable i, value;
+    for (i := 0; i < 5; i++) begin
+        display_msg("======== Item: " + i);
+        if i == 1 then begin
+            value = 1;
+        end else begin
+            value = 0;
+        end
+        display_msg("Value: " + value);
+        if (value != 0) then begin
+            display_msg("Interesting item: " + i);
+            while (value != 0) do begin
+                display_msg("While loop for item: " + i);
+                break; // should do nothing
+                display_msg("This should not be displayed for item: " + i); // Never displayed
+            end
+            display_msg("After while loop for item: " + i + ", value: " + value);
+        end else begin
+            display_msg("Not interesting item: " + i);
+        end
+        display_msg("End of item " + i);
+    end
+    display_msg("Finished testing i.");
+end
