@@ -1,14 +1,74 @@
-procedure map_enter_p_proc begin
-    noop;
-    while (1) do begin
-        break;
-    end
-    noop;
+procedure some_noop(variable param) begin
 end
 
+procedure test_loops() begin
+    variable i;
 
-procedure start begin
-    display_msg("Testing break in foreach loop...");
+    display_msg("Break in while loop...");
+    i = 0;
+    while (i < 5) do begin
+        call some_noop("while loop begin");
+        if i == 2 then begin
+            break;
+        end
+        i++;
+        call some_noop("while loop end");
+    end
+
+    display_msg("Continue in while loop...");
+    i = 0;
+    while (i < 5) do begin
+        call some_noop("while loop begin");
+        if i == 2 then begin
+            i += 2;
+            continue;
+        end
+        i++;
+        call some_noop("while loop end");
+    end
+
+    display_msg("Break in for loop...");
+    for (i := 0; i < 5; i++) begin
+        call some_noop("for loop begin");
+        if i == 2 then begin
+            break;
+        end
+        call some_noop("for loop end");
+    end
+
+    display_msg("Continue in for loop...");
+    for (i := 0; i < 5; i++) begin
+        call some_noop("for loop begin");
+        if i == 2 then begin
+            continue;
+        end
+        call some_noop("for loop end");
+    end    
+
+    variable arr := [1, 2, 3, 4, 5];
+    display_msg("Break in foreach loop...");
+    foreach (i in arr) begin
+        call some_noop("foreach loop begin");
+        if i == 2 then begin
+            break;
+        end
+        call some_noop("foreach loop end");
+    end
+    display_msg("Continue in foreach loop...");
+    foreach (i in arr) begin
+        call some_noop("foreach loop begin");
+        if i == 2 then begin
+            continue;
+        end
+        call some_noop("foreach loop end");
+    end
+
+
+    display_msg("End of testing break/continue in loops");
+end  
+
+procedure test_nested_loop begin
+    display_msg("Testing break in nested loop...");
     variable i, value;
     for (i := 0; i < 5; i++) begin
         display_msg("======== Item: " + i);
@@ -31,5 +91,10 @@ procedure start begin
         end
         display_msg("End of item " + i);
     end
-    display_msg("Finished testing i.");
+    display_msg("Finished testing nesting loops.");
+end
+
+procedure start begin
+    call test_loops();
+    call test_nested_loop();
 end
