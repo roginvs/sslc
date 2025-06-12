@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#ifndef NO_LONG_JMP
 #include <setjmp.h>
-
+#endif
 #include "parse.h"
 #include "parselib.h"
 #include "extra.h"

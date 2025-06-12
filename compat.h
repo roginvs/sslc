@@ -6,7 +6,6 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <unistd.h>
@@ -36,14 +35,18 @@ int strcpy_s(char* dest, size_t destsz, const char* src);
 int strcat_s(char *dest, size_t destsz, const char *src);
 
 #define _stricmp strcasecmp
+#if ! defined(__wasm__)
 #define GetCurrentProcessId() ((unsigned int)getpid())
+#else
+#define GetCurrentProcessId() (123456789)
+#endif
 #define _mkdir(path) mkdir((path), 0777)
 #define _chdir       chdir
 #define _getcwd      getcwd
 #define _stat stat
 
 
-#if !defined(__EMSCRIPTEN__)
+#if !defined(__EMSCRIPTEN__) && ! defined(__wasm__)
 typedef __time_t time_t;
 #endif
 
